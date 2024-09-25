@@ -37,6 +37,18 @@ export class CompanyService {
 
   }
 
+  // get One Ad
+  getAdId(adId:any ): Observable<any>{
+
+    
+
+    return this.http.get(BASIC_URL + 'api/company/ad/'+adId, {
+      headers: this.createAuthorizationHeader() // send the Token
+    });
+
+
+  }
+
 
   createAuthorizationHeader(): HttpHeaders{
     let authHeaders: HttpHeaders = new HttpHeaders();
