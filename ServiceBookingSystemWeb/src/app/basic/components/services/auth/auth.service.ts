@@ -2,6 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { UserStorageService } from '../storage/user-storage.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 const BASIC_URL = 'http://localhost:8080/';  // url of our Springboot Backend
 
@@ -51,5 +52,31 @@ export class AuthService {
 
         })); 
   }
+
+
+  isTokenNotValid(): boolean{
+    return !this.isTokenValid();
+
+  }
+
+  isTokenValid():boolean{
+    // get the token
+    const token = UserStorageService.getToken();
+    if(!token){
+      return false;
+    }
+    //decode the token
+    const jwtHelper = new JwtHelperService(); // from the dependency we installed
+    const isTokenExpired = jwtHelper.isTokenExpired(token);
+
+    if (isTokenExpired){
+      localStorage.clear();
+      return false;
+    }
+    return  true;
+
+}
+
+  
 
 }
